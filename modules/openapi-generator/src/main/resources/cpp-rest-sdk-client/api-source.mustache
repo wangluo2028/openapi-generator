@@ -8,7 +8,8 @@
 
 #include <unordered_set>
 
-#include <boost/algorithm/string/replace.hpp>
+//#include <boost/algorithm/string/replace.hpp>
+#include "Utility.h"
 
 {{#apiNamespaceDeclarations}}
 namespace {{this}} {
@@ -26,7 +27,7 @@ using namespace {{modelNamespace}};
 }
 
 {{#operation}}
-pplx::task<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}> {{classname}}::{{operationId}}({{#allParams}}{{^required}}boost::optional<{{/required}}{{{dataType}}}{{^required}}>{{/required}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}}) const
+pplx::task<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}> {{classname}}::{{operationId}}({{#allParams}}{{^required}}{{/required}}{{{dataType}}}{{^required}}*{{/required}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}}) const
 {
 {{#allParams}}{{#required}}{{^isPrimitiveType}}{{^isContainer}}
     // verify the required parameter '{{paramName}}' is set
@@ -38,7 +39,7 @@ pplx::task<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/r
 
     std::shared_ptr<const ApiConfiguration> localVarApiConfiguration( m_ApiClient->getConfiguration() );
     utility::string_t localVarPath = utility::conversions::to_string_t("{{{path}}}");
-    {{#pathParams}}boost::replace_all(localVarPath, utility::conversions::to_string_t("{") + utility::conversions::to_string_t("{{baseName}}") + utility::conversions::to_string_t("}"), ApiClient::parameterToString({{{paramName}}}));
+    {{#pathParams}}utility::StringUtil::ReplaceAll(localVarPath, utility::conversions::to_string_t("{") + utility::conversions::to_string_t("{{baseName}}") + utility::conversions::to_string_t("}"), ApiClient::parameterToString({{{paramName}}}));
     {{/pathParams}}
 
     std::map<utility::string_t, utility::string_t> localVarQueryParams;
@@ -90,7 +91,8 @@ pplx::task<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/r
     {{^vendorExtensions.x-codegen-response-ishttpcontent}}
     else
     {
-        throw ApiException(400, utility::conversions::to_string_t("{{classname}}->{{operationId}} does not produce any supported media type"));
+        localVarResponseHttpContentType = utility::conversions::to_string_t("application/json");
+        // throw ApiException(400, utility::conversions::to_string_t("{{classname}}->{{operationId}} does not produce any supported media type"));
     }
     {{/vendorExtensions.x-codegen-response-ishttpcontent}}
 

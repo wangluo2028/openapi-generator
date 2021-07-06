@@ -2,8 +2,9 @@
 #include "MultipartFormData.h"
 #include "ModelBase.h"
 
-#include <boost/uuid/random_generator.hpp>
-#include <boost/uuid/uuid_io.hpp>
+//#include <boost/uuid/random_generator.hpp>
+//#include <boost/uuid/uuid_io.hpp>
+#include "Utility.h"
 
 {{#modelNamespaceDeclarations}}
 namespace {{this}} {
@@ -11,9 +12,10 @@ namespace {{this}} {
 
 MultipartFormData::MultipartFormData()
 {
-    utility::stringstream_t uuidString;
-    uuidString << boost::uuids::random_generator()();
-    m_Boundary = uuidString.str();
+    //utility::stringstream_t uuidString;
+    //uuidString << boost::uuids::random_generator()();
+    //m_Boundary = uuidString.str();
+    m_Boundary = utility::StringUtil::Utf8ToUnicode(utility::StringUtil::newUUIDV4());
 }
 
 MultipartFormData::MultipartFormData(const utility::string_t& boundary)
